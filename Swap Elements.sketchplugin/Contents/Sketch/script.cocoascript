@@ -5,15 +5,11 @@ var swapElementsTopLeft = function(context) {
 		var layer = [selection objectAtIndex:0],
 			layer2 = [selection objectAtIndex:1];
 			
-			var x1 = [[layer frame] x];
-			var y1 = [[layer frame] y];
-			var x2 = [[layer2 frame] x];
-			var y2 = [[layer2 frame] y];
-			
-			[[layer frame] addX:x2-x1];
-			[[layer frame] addY:y2-y1];
-			[[layer2 frame] addX:x1-x2];
-			[[layer2 frame] addY:y1-y2];			
+			var origin1 = [[layer frame] origin];
+			var origin2 = [[layer2 frame] origin];
+            
+			[[layer frame] setOrigin:origin2];
+            [[layer2 frame] setOrigin:origin1];
 	}
 
 }
@@ -24,16 +20,15 @@ var swapElementsMidPoint = function(context) {
 	if ([selection count] == 2) {
 		var layer = [selection objectAtIndex:0],
 			layer2 = [selection objectAtIndex:1];
-			
-			var x1 = [[layer frame] midX];
-			var y1 = [[layer frame] midY];
-			var x2 = [[layer2 frame] midX];
-			var y2 = [[layer2 frame] midY];
-			
-			[[layer frame] addX:x2-x1];
-			[[layer frame] addY:y2-y1];
-			[[layer2 frame] addX:x1-x2];
-			[[layer2 frame] addY:y1-y2];			
-	}
+
+            var frame1 = [layer frame];
+            var frame2 = [layer2 frame];
+
+            var centerToOrigin1 = NSMakePoint([frame2 midX] - [frame1 width] / 2, [frame2 midY] - [frame1 height] / 2);
+            var centerToOrigin2 = NSMakePoint([frame1 midX] - [frame2 width] / 2, [frame1 midY] - [frame2 height] / 2)
+
+            [[layer frame] setOrigin: centerToOrigin1];
+            [[layer2 frame] setOrigin: centerToOrigin2];
+    }
 }
 
